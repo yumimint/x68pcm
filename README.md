@@ -3,7 +3,7 @@
 ## install
 
 ```bash
-pip install git+https://github.com/yumimint/x68pic
+pip install git+https://github.com/yumimint/x68pcm
 ```
 
 ## usage
