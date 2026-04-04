@@ -1,0 +1,32 @@
+[project]
+name = "x68pcm"
+version = "2026.4.4"
+authors = [{ name="yumimint", email="i.yumimint@gmail.com" }]
+description = "PIC Image "
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "numpy",
+    "librosa",
+    "sounddevice",
+    "soundfile",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "twine",
+]
+
+[project.scripts]
+x68pcm = "x68pcm:main"
+
+[project.urls]
+Repository = "https://github.com/yumimint/x68pcm"
+Issues = "https://github.com/yumimint/x68pcm/issues"
