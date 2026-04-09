@@ -8,6 +8,7 @@ pip install git+https://github.com/yumimint/x68pcm
 
 ## usage
 
+```
 usage: x68pcm [-h] [-o OUTPUT] [-s N] [-d] {d,e} input
 
 x68k ADPCM converter
@@ -22,3 +23,4 @@ options:
   -s N          sample rate (0=3.9, 1=5.2, 3=7.8, 3=10.4, 4=15.6) KHz
                 default=4
   -d, --dither  enable dithering
+```
