@@ -794,7 +794,7 @@ wheels = [
 
 [[package]]
 name = "x68pcm"
-version = "2026.4.4"
+version = "2026.10.22"
 source = { editable = "." }
 dependencies = [
     { name = "librosa" },
