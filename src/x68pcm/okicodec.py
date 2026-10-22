@@ -1,8 +1,11 @@
+from typing import ClassVar
+
+
 class OkiCodec:
     """OKI ADPCM (MSM5205等) コーデックのPython実装"""
 
     # ステップテーブル (49要素)
-    STEP_TABLE = [
+    STEP_TABLE: ClassVar[list[int]] = [
         16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66, 73,
         80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279,
         307, 337, 371, 408, 449, 494, 544, 598, 658, 724, 796, 876, 963,
@@ -10,13 +13,13 @@ class OkiCodec:
     ]
 
     # インデックス調整テーブル (16要素、4ビット入力に対応)
-    INDEX_ADJUST = [-1, -1, -1, -1, 2, 4, 6, 8, -1, -1, -1, -1, 2, 4, 6, 8]
+    INDEX_ADJUST: ClassVar[list[int]] = [-1, -1, -1, -1, 2, 4, 6, 8, -1, -1, -1, -1, 2, 4, 6, 8]
 
     def __init__(self):
-        self.last_sample = 0  # 前回の12bit PCM値 (-2048 ～ 2047)
-        self.step_index = 0   # 現在のステップインデックス (0 ～ 48)
+        self.last_sample: int = 0  # 前回の12bit PCM値 (-2048 ～ 2047)
+        self.step_index: int = 0   # 現在のステップインデックス (0 ～ 48)
 
-    def decode_sample(self, code):
+    def decode_sample(self, code: int) -> int:
         """4ビットのADPCM値を12ビットのPCM値にデコードする"""
         step = self.STEP_TABLE[self.step_index]
 
@@ -50,7 +53,7 @@ class OkiCodec:
 
         return self.last_sample
 
-    def encode_sample(self, sample):
+    def encode_sample(self, sample: int) -> int:
         """16ビットまたは12ビットのPCM値を4ビットのADPCM値にエンコードする"""
         # 入力を12ビットにスケールダウン (もし16ビット入力なら 4bit シフト)
         # ここでは元コードに合わせ、クランプのみ行う
