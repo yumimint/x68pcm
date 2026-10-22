@@ -1,11 +1,13 @@
+from numpy.core.numeric import astype
 import argparse
+import sys
 import time
 from pathlib import Path
 
 import librosa
 import numpy as np
-import sounddevice as sd  # type:ignore
-import soundfile as sf  # type:ignore
+import sounddevice as sd
+import soundfile as sf
 
 from x68pcm.okicodec import OkiCodec
 
@@ -42,14 +44,14 @@ def encode(args: argparse.Namespace):
     # 5. ADPCMエンコード
     codec = OkiCodec()
     buf = bytearray()
-    count = 0
+    odd = 0
     for sample in data_resampled:
         code = codec.encode_sample(sample)
-        if count & 1:
+        if odd:
             buf[-1] |= code << 4
         else:
             buf.append(code)
-        count += 1
+        odd ^= 1
 
     if args.output:
         pcm = Path(args.output)
@@ -74,6 +76,13 @@ def decode(args: argparse.Namespace):
 
     # 12bit -> 16bit
     data *= 1 << (16 - 12)
+
+    # ディザリング
+    if args.dither:
+        data = data / 32768.0
+        data += generate_dither_noise(
+            len(data), 16 / 32768)
+        data = (data * 32768).astype(np.int16)
 
     if args.output:
         wav = Path(args.output)
@@ -107,9 +116,9 @@ def main():
             encode(args)
         elif args.mode == "d":
             decode(args)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"{type(e).__name__}({e})")
-        exit(1)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
